@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet,View,TextInput,Button ,Image,TouchableOpacity,Alert,Text,CheckBox} from 'react-native';
 
+import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-loading-spinner-overlay';
 import axios from 'axios';
@@ -47,6 +48,18 @@ function EditProduct({route,navigation}) {
       { cancelable: false }
     );
   }
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1,1],
+      quality:0.3,
+      base64:true
+    });
+    if (!result.cancelled) {
+      setPicture('data:image/jpg;base64,'+result.base64);
+    }
+  };
   const updateProduct = () =>{
     setLoad(true);
     if(name=='' || price == ''  || picture == 'https://cdn1.iconfinder.com/data/icons/social-17/48/photos2-512.png'){
@@ -113,7 +126,7 @@ function EditProduct({route,navigation}) {
           </View>
           <Image style={{width: 100, height: 100}} source={{uri:picture}}/>
           <View style={{ flexDirection:"row",margin:20}}>
-          <TouchableOpacity style={styles.icon}>
+          <TouchableOpacity style={styles.icon} onPress={pickImage}>
             <Ionicons name='ios-images' size={60} />
           </TouchableOpacity>
             <TouchableOpacity style={styles.icon} onPress={()=>navigation.navigate('Camera',{screen:'editProduct'})}>

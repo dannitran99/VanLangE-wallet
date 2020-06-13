@@ -4,6 +4,9 @@ import { StyleSheet,View,TextInput,Button ,Image,TouchableOpacity,Alert,Text} fr
 import Spinner from 'react-native-loading-spinner-overlay';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import * as ImagePicker from 'expo-image-picker';
+//import Constants from 'expo-constants';
+
 import axios from 'axios';
 
 function AddProduct({navigation, route }) {
@@ -11,6 +14,32 @@ function AddProduct({navigation, route }) {
   const [name, setName] = React.useState('');
   const [price, setPrice] = React.useState('');
   const [load, setLoad] = React.useState(false);
+
+ // khi nao can dung toi IOS
+
+  // useEffect(() => {
+  //   (async () => {
+  //     if (Constants.platform.ios) {
+  //       const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+  //       if (status !== 'granted') {
+  //         alert('Sorry, we need camera roll permissions to make this work!');
+  //       }
+  //     }
+  //   })();
+  // }, []);
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1,1],
+      quality:0.3,
+      base64:true
+    });
+    if (!result.cancelled) {
+      setPicture('data:image/jpg;base64,'+result.base64);
+    }
+  };
+
   function postData(){
     setLoad(true);
     if(name=='' || price == ''  || picture == 'https://cdn1.iconfinder.com/data/icons/social-17/48/photos2-512.png'){
@@ -63,7 +92,7 @@ function AddProduct({navigation, route }) {
         <Image style={{width: 100, height: 100}} source={{uri:picture}}/>
         <View style={{ flexDirection:"row",margin:20}}>
         <TouchableOpacity style={styles.icon}>
-          <Ionicons name='ios-images' size={60} />
+          <Ionicons name='ios-images' size={60} onPress={pickImage} />
         </TouchableOpacity>
           <TouchableOpacity style={styles.icon} onPress={()=>navigation.navigate('Camera',{screen:'addProduct'})}>
             <Ionicons name='ios-camera' size={60} />

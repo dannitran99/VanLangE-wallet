@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet,Image, Text, View ,TouchableOpacity} from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import NumberFormat from 'react-number-format';
 function ProductItem(props) {
   const{product} = props;
   return (
@@ -10,7 +10,13 @@ function ProductItem(props) {
           <Text style={styles.textStyle}>{product.name}</Text>
           <Image style={styles.categoryImage} source={{uri:product.image}}/>
           <View style={{flex:1, flexDirection:"row",justifyContent:"space-between"}}>
-            <Text style={[styles.bottomDiv,styles.priceText]}>{product.price}</Text>
+            <NumberFormat
+               value={product.price}
+               displayType={'text'}
+               thousandSeparator={true}
+               suffix={' ₫'}
+               renderText={formattedValue => <Text style={[styles.bottomDiv,styles.priceText]}>{formattedValue}</Text>} // <--- Don't forget this!
+             />
             <TouchableOpacity style={styles.bottomDiv} onPress={props.onPress}>
                 <Ionicons name='ios-create' size={30} />
             </TouchableOpacity>
@@ -39,13 +45,13 @@ const styles = StyleSheet.create({
       height:128
     },
     bottomDiv:{
-      flex:1,
       marginHorizontal:5,
       alignSelf: 'flex-end',
       alignItems: 'center',
     },
     priceText:{
-      color:'red',
+      flex:1,
+      color:'#9DA9B2',
       textDecorationLine:'underline'
     }
 });

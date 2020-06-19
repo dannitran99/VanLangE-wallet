@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet,View,TextInput,Button ,Image,TouchableOpacity,Alert,Text} from 'react-native';
+import { StyleSheet,View,TextInput ,Image,TouchableOpacity,Alert,Text} from 'react-native';
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Spinner from 'react-native-loading-spinner-overlay';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -46,7 +48,7 @@ function AddProduct({navigation, route }) {
       setLoad(false);
       return Alert.alert('Thông báo',"Bạn cần nhập đầy đủ thông tin!")
     }
-    axios.post('http://192.168.1.9:1234/manager/newProduct', {
+    axios.post('https://vlu-ewallet.herokuapp.com/market-manager/newProduct', {
        name: name,
        price: price,
        image:picture
@@ -98,9 +100,18 @@ function AddProduct({navigation, route }) {
             <Ionicons name='ios-camera' size={60} />
           </TouchableOpacity>
         </View>
-          <TouchableOpacity style={styles.addButton} onPress={postData}>
-            <Text style={{color:'#FFF'}}>Thêm</Text>
-          </TouchableOpacity>
+        <Button
+         buttonStyle={styles.addButton}
+          icon={
+           <Icon
+             name="check-circle-o"
+             size={20}
+             color="white"
+           />
+          }
+          title="   Thêm"
+          onPress={postData}
+        />
       </View>
 
   );
@@ -136,15 +147,8 @@ const styles = StyleSheet.create({
       alignItems:'center'
   },
   addButton:{
-    marginTop:20,
-    height:45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:20,
-    width:100,
-    borderRadius:30,
-    backgroundColor:'#000'
+    paddingHorizontal:30,
+    paddingVertical:10
   }
 })
 

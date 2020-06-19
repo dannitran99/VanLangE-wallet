@@ -3,7 +3,7 @@ import {StyleSheet,Image,TouchableHighlight, AsyncStorage, Button, Text, TextInp
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import CustomDrawerContent from './components/drawerCustom'
@@ -11,12 +11,13 @@ import CustomDrawerContent from './components/drawerCustom'
 import axios from 'axios';
 
 import Home from './screens/home';
+import PlashScreenImage from './assets/logo_transparent.png';
 const AuthContext = React.createContext();
 
 function SplashScreen() {
   return (
-    <View>
-      <Text>Loading...</Text>
+    <View style={styles.splashBackground} >
+      <Image style={styles.categoryImage} source={PlashScreenImage}/>
     </View>
   );
 }
@@ -78,7 +79,7 @@ function SignInScreen() {
        if(username == "" ||password == ""){
           setLoad(false);
           return Alert.alert("Thông báo","Tài khoản hoặc mật khẩu không được bỏ trống!")}
-       axios.post('http://192.168.1.9:1234/login', {
+       axios.post('https://vlu-ewallet.herokuapp.com/login/login', {
           username: username,
           password: password
         }).then(res =>{
@@ -166,7 +167,7 @@ export default function App({ navigation }) {
       <NavigationContainer>
           {state.isLoading ? (
               <Stack.Navigator>
-            <Stack.Screen name="Splash" component={SplashScreen} />
+            <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false}} />
             </Stack.Navigator>
           ) : state.userToken == null ? (
               <Stack.Navigator>
@@ -178,8 +179,12 @@ export default function App({ navigation }) {
               </Stack.Navigator>
           ) : (
             <Drawer.Navigator initialRouteName="Home" drawerContent={props => <CustomDrawerContent {...props} />}>
-               <Drawer.Screen name="Trang chủ" component={Home} />
-               <Drawer.Screen name="Đăng xuất" component={Logout} />
+               <Drawer.Screen name="Trang chủ" component={Home}
+                  options={{ drawerIcon:()=>{return <Icon name='home' size={25} color='#4388D6'/>} }}
+               />
+               <Drawer.Screen name="Đăng xuất" component={Logout}
+                  options={{ drawerIcon:()=>{return <Icon name='sign-out' size={25} color='#4388D6'/>} }}
+                />
             </Drawer.Navigator>
           )}
 
@@ -244,5 +249,16 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: 'white',
+  },
+  splashBackground:{
+    backgroundColor:"#4388D6",
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  categoryImage:{
+    width:350,
+    height:350,
+    backgroundColor:'transparent'
   }
 });

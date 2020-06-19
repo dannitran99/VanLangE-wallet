@@ -43,7 +43,7 @@ export default class CameraScreen extends React.Component {
             <View style={{ flex: 1}}>
               <Camera style={{ flex: 1 }}pictureSize='320x240' type={this.state.cameraType}
               ref={ref => {this.camera = ref}}>
-                <View style={{flex:1, flexDirection:"row",justifyContent:"space-between",margin:20}}>
+                <View style={{flex:1, flexDirection:"row",justifyContent:"space-between",margin:35}}>
                     <View style={styles.buttonCam}/>
                     <TouchableOpacity style={styles.buttonCam} onPress={this.takePicture.bind(this)}>
                     <FontAwesome

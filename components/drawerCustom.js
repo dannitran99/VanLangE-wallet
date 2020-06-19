@@ -1,5 +1,7 @@
 import * as React from 'react';
-import {StyleSheet,Image, AsyncStorage, Text, View } from 'react-native';
+import {StyleSheet,Image, AsyncStorage, Text, View,ImageBackground  } from 'react-native';
+import BackgroundImage from '../assets/blue_background.jpg';
+import Logo from '../assets/logo-blue_transparent_cutsize.png'
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -16,7 +18,7 @@ function CustomDrawerContent(props) {
   const [point, setPoint] = React.useState(-1);
   React.useEffect(() => {
     AsyncStorage.getItem('userToken', (err, result) => {
-      axios.post('http://192.168.1.9:1234/jwtverify', {
+      axios.post('https://vlu-ewallet.herokuapp.com/login/jwtverify', {
          token: result
        }).then(res =>{
          setUsername(res.data.user);
@@ -29,8 +31,10 @@ function CustomDrawerContent(props) {
     });
   }, []);
   return (
+    <View style={{flex:1}}>
      <DrawerContentScrollView {...props}>
               <View style={styles.drawerContent}>
+                <ImageBackground source={BackgroundImage} style={{flex:1}}>
                   <View style={styles.userInfoSection}>
                       <View style={{flexDirection:'row',marginTop: 15}}>
                           <Image style={styles.inputIcon} source={{uri: 'https://cdn4.iconfinder.com/data/icons/eldorado-user/40/user-512.png'}}/>
@@ -51,9 +55,15 @@ function CustomDrawerContent(props) {
                           </View>
                       </View>
                   </View>
+                </ImageBackground>
               </View>
               <DrawerItemList {...props} />
           </DrawerContentScrollView>
+          <View style={styles.infoDiv}>
+              <Image source={Logo} style={styles.logo}/>
+              <Text style={styles.info}>Phát triển và vận hành bởi Team#4</Text>
+          </View>
+        </View>
   );
 }
 
@@ -61,17 +71,19 @@ function CustomDrawerContent(props) {
 const styles = StyleSheet.create({
     drawerContent: {
       flex: 1,
-      marginBottom:20
+      paddingBottom:30
     },
     userInfoSection: {
       paddingLeft: 20,
     },
     title: {
+      color:'white',
       fontSize: 16,
       marginTop: 3,
       fontWeight: 'bold',
     },
     caption: {
+      color:'white',
       fontSize: 14,
       lineHeight: 14,
     },
@@ -81,6 +93,8 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     section: {
+      paddingBottom:15,
+      flex:1,
       flexDirection: 'row',
       alignItems: 'center',
       marginRight: 15,
@@ -109,6 +123,18 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       paddingVertical: 12,
       paddingHorizontal: 16,
+    },
+    infoDiv:{
+      alignItems:'center',
+      paddingBottom:3
+    },
+    info:{
+      fontSize:10,
+      color:'#9DA9B2'
+    },
+    logo:{
+      width:130,
+      height:50
     }
   });
 

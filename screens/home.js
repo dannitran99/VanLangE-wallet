@@ -2,8 +2,7 @@ import React from 'react';
 import { StyleSheet,View,Text ,TouchableOpacity} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import Categories from './categories';
 import AddProduct from './addProduct';
 import EditProduct from './editProduct';
@@ -13,6 +12,8 @@ import Canteen from './canteen';
 import Library from './library';
 import Motocycle from './motocycle';
 import Statistic from './statistic';
+import Scan from './scanQR';
+import ButtonQR from '../components/buttonQR';
 const StackCategories = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -29,6 +30,9 @@ export default class Home extends React.Component {
               } else if (route.name === 'Thống kê') {
                 iconName = 'ios-stats';
               }
+              else if (route.name === 'Thanh toán QR') {
+                return <ButtonQR navigation={this.props.navigation} />;
+              }
               return <Ionicons name={iconName} size={size} color={color} />;
             },
           })}
@@ -37,6 +41,16 @@ export default class Home extends React.Component {
             inactiveTintColor: 'gray',
           }}>
          <Tab.Screen name="Danh mục" component={StackCate}/>
+         <Tab.Screen name="Thanh toán QR" component={StackScan}
+              options={{
+                tabBarLabel:''
+              }}
+              listeners={{
+              tabPress: (e) => {
+                e.preventDefault(); // — > the main part
+              },
+            }}
+         />
          <Tab.Screen name="Thống kê" component={StackStat}/>
       </Tab.Navigator>
     );
@@ -73,6 +87,14 @@ function StackCate({navigation}) {
   );
 }
 
+function StackScan({navigation}) {
+  return (
+    <StackCategories.Navigator>
+       <StackCategories.Screen name="QR" component={Scan}
+       options={{headerShown: false}}/>
+    </StackCategories.Navigator>
+  );
+}
 
 function StackStat({navigation}) {
   return (

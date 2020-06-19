@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet,View,TextInput,Button ,Image,TouchableOpacity,Alert,Text,CheckBox} from 'react-native';
-
+import { StyleSheet,View,TextInput ,Image,TouchableOpacity,Alert,Text,CheckBox} from 'react-native';
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -30,7 +31,7 @@ function EditProduct({route,navigation}) {
         },
         { text: "OK", onPress: () => {
           setLoad(true);
-          axios.post('http://192.168.1.9:1234/manager/deleteProduct', {
+          axios.post('https://vlu-ewallet.herokuapp.com/market-manager/deleteProduct', {
              id:id
            }).then(res =>{
              if(res.data == true ) {
@@ -66,7 +67,7 @@ function EditProduct({route,navigation}) {
       setLoad(false);
       return Alert.alert('Thông báo',"Bạn cần nhập đầy đủ thông tin!")
     }
-    axios.post('http://192.168.1.9:1234/manager/editProduct', {
+    axios.post('https://vlu-ewallet.herokuapp.com/market-manager/editProduct', {
        id: id,
        name: name,
        price: price,
@@ -134,12 +135,31 @@ function EditProduct({route,navigation}) {
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection:"row"}}>
-            <TouchableOpacity style={[styles.addButton,{backgroundColor:'red'}]} onPress={deleteData}>
-              <Text style={{color:'#FFF'}}>Xóa</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.addButton} onPress={updateProduct}>
-              <Text style={{color:'#FFF'}}>Sửa</Text>
-            </TouchableOpacity>
+            <Button
+             buttonStyle={styles.addButton}
+              icon={
+               <Icon
+                 name="trash-o"
+                 size={20}
+                 color="#4388D6"
+               />
+              }
+              title="   Xóa"
+              type="outline"
+              onPress={deleteData}
+            />
+            <Button
+             buttonStyle={styles.addButton}
+              icon={
+               <Icon
+                 name="check-circle-o"
+                 size={20}
+                 color="white"
+               />
+              }
+              title="   Sửa"
+              onPress={updateProduct}
+            />
           </View>
         </View>
 
@@ -177,16 +197,8 @@ const styles = StyleSheet.create({
   },
   addButton:{
     marginHorizontal:35,
-    flex:1,
-    marginTop:20,
-    height:45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:20,
-    width:100,
-    borderRadius:30,
-    backgroundColor:'#000'
+    paddingHorizontal:30,
+    paddingVertical:10
   },
   checkboxContainer: {
      flexDirection: "row",

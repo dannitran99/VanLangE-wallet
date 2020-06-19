@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet,FlatList,View} from 'react-native';
-
+import { SearchBar } from 'react-native-elements';
 import ProductItem from '../components/productItem';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -8,11 +8,16 @@ import axios from 'axios';
 
 function Market({navigation, route }) {
   const [products, setProducts] = React.useState([]);
+  const [fullProducts, setFullProducts] = React.useState([]);
+  const [keyword, setKeyword] = React.useState('');
   const [load, setLoad] = React.useState(false);
+
+
   React.useEffect(() => {
     route.params = null;
     setLoad(true);
-    axios.get('http://192.168.1.9:1234/manager/getData').then(res =>{
+    axios.get('https://vlu-ewallet.herokuapp.com/market-manager/getData').then(res =>{
+       setFullProducts(res.data);
        setProducts(res.data);
        setLoad(false);
      }).catch(err =>{
@@ -43,9 +48,21 @@ function Market({navigation, route }) {
          );
         }
        }
-       keyExtractor={item => `${item._id}`}/>
+       keyExtractor={item => `${item._id}`}
+       ListHeaderComponent={<SearchBar placeholder='Tìm kiếm...' value={keyword}
+          onChangeText={(text)=>searchFilterFunction(text)}
+          lightTheme round />}/>
     </View>
   );
+  function searchFilterFunction(text){
+    setKeyword(text)
+    const newData = fullProducts.filter(item => {
+      const itemData = `${item.name}` +'';
+      const textData = text.toLowerCase();
+      return itemData.toLowerCase().indexOf(textData) > -1;
+    });
+    setProducts(newData);
+  };
 }
 const formatData=(data, numColumns)=>{
   const full = Math.floor(data.length/numColumns);

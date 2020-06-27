@@ -1,10 +1,12 @@
 import React from 'react';
-import { StyleSheet,View,TextInput ,Image,TouchableOpacity,Alert,Text,CheckBox} from 'react-native';
+import { StyleSheet,View,TextInput ,Image,TouchableOpacity,Alert,Text,CheckBox,ScrollView} from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-loading-spinner-overlay';
+
+import LottieView from 'lottie-react-native';
 import axios from 'axios';
 
 function EditProduct({route,navigation}) {
@@ -12,13 +14,17 @@ function EditProduct({route,navigation}) {
   const [picture, setPicture] = React.useState(route.params.detail.image||'https://cdn1.iconfinder.com/data/icons/social-17/48/photos2-512.png');
   const [name, setName] = React.useState(route.params.detail.name);
   const [price, setPrice] = React.useState(route.params.detail.price);
+  const [barcode, setBarcode] = React.useState(route.params.detail.barcode);
   const [avail, setAvail] = React.useState(route.params.detail.available);
   const [load, setLoad] = React.useState(false);
   React.useEffect(() => {
     if (route.params?.post) {
       setPicture('data:image/jpg;base64,'+route.params.post);
     }
-  }, [route.params?.post]);
+    if (route.params?.barcode) {
+      setBarcode(route.params.barcode+'');
+    }
+  }, [route.params?.post,route.params?.barcode]);
   function deleteData(){
     Alert.alert(
       "Thông báo",
@@ -63,7 +69,7 @@ function EditProduct({route,navigation}) {
   };
   const updateProduct = () =>{
     setLoad(true);
-    if(name=='' || price == ''  || picture == 'https://cdn1.iconfinder.com/data/icons/social-17/48/photos2-512.png'){
+    if(name=='' || price == ''  || barcode == ''|| picture == 'https://cdn1.iconfinder.com/data/icons/social-17/48/photos2-512.png'){
       setLoad(false);
       return Alert.alert('Thông báo',"Bạn cần nhập đầy đủ thông tin!")
     }
@@ -72,7 +78,8 @@ function EditProduct({route,navigation}) {
        name: name,
        price: price,
        avail: avail,
-       image:picture
+       image:picture,
+       barcode:barcode
      }).then(res =>{
        if(res.data == 'Success' ) {
          setLoad(false);
@@ -86,20 +93,13 @@ function EditProduct({route,navigation}) {
       })
   }
   return (
+    <ScrollView>
       <View style={styles.container}>
           <Spinner
               visible={load}
               color='00b5ec'
               animation='slide'
           />
-          <View style={[styles.inputContainer,{backgroundColor:'gray'}]}>
-            <TextInput
-              value={id}
-              style={styles.input}
-              placeholder='ID'
-              editable={false}
-            />
-          </View>
           <View style={styles.inputContainer}>
             <TextInput
               value={name}
@@ -116,6 +116,20 @@ function EditProduct({route,navigation}) {
               keyboardType='number-pad'
               onChangeText={setPrice}
             />
+          </View>
+          <View style={{flexDirection:"row", alignItems:'center'}}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={barcode.toString()}
+                style={styles.input}
+                placeholder='Barcode'
+                keyboardType='number-pad'
+                onChangeText={setBarcode}
+              />
+              <TouchableOpacity style={styles.barcode} onPress={()=>navigation.navigate('Scan',{screen:'editProduct'})}>
+                  <LottieView style={{width:40}} source={require('../anim/4089-barcode-scanner.json')} autoPlay loop />
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={styles.checkboxContainer}>
             <CheckBox
@@ -162,7 +176,7 @@ function EditProduct({route,navigation}) {
             />
           </View>
         </View>
-
+      </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -182,7 +196,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingVertical:60
   },
   inputContainer: {
       borderBottomColor: '#F5FCFF',
@@ -209,6 +224,12 @@ const styles = StyleSheet.create({
   },
   label: {
     margin: 8,
+  },
+  barcode:{
+    backgroundColor:'white',
+    padding:8,
+    borderRadius:15,
+    elevation:5
   }
 })
 

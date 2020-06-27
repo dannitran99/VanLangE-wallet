@@ -12,9 +12,11 @@ import Canteen from './canteen';
 import Library from './library';
 import Motocycle from './motocycle';
 import Statistic from './statistic';
-import Scan from './scanQR';
+import Scan from './scanBarCode';
+import NewCart from './newCart';
+import CartMarket from './cartMarket';
 import ButtonQR from '../components/buttonQR';
-const StackCategories = createStackNavigator();
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default class Home extends React.Component {
@@ -60,8 +62,8 @@ export default class Home extends React.Component {
 
 function StackCate({navigation}) {
   return (
-    <StackCategories.Navigator>
-       <StackCategories.Screen name="Danh mục" component={Categories}
+    <Stack.Navigator>
+       <Stack.Screen name="Danh mục" component={Categories}
        options={{
           headerLeft:() => (
             <TouchableOpacity style={styles.icon} onPress={() => navigation.toggleDrawer()}>
@@ -69,7 +71,7 @@ function StackCate({navigation}) {
             </TouchableOpacity>
           ),
         }}/>
-        <StackCategories.Screen name="Siêu thị" component={Market}
+        <Stack.Screen name="Siêu thị" component={Market}
         options={{
            headerRight:() => (
              <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Thêm sản phẩm')}>
@@ -77,29 +79,31 @@ function StackCate({navigation}) {
              </TouchableOpacity>
            ),
          }}/>
-        <StackCategories.Screen name="Căn tin" component={Canteen}/>
-        <StackCategories.Screen name="Thư viện" component={Library}/>
-        <StackCategories.Screen name="Gửi xe" component={Motocycle}/>
-        <StackCategories.Screen name="Thêm sản phẩm" component={AddProduct}/>
-        <StackCategories.Screen name="Sửa sản phẩm" component={EditProduct} options={({ route }) => ({ title: route.params.detail.name })}/>
-        <StackCategories.Screen name="Camera" component={CameraApp}/>
-    </StackCategories.Navigator>
+        <Stack.Screen name="Căn tin" component={Canteen}/>
+        <Stack.Screen name="Thư viện" component={Library}/>
+        <Stack.Screen name="Gửi xe" component={Motocycle}/>
+        <Stack.Screen name="Thêm sản phẩm" component={AddProduct}/>
+        <Stack.Screen name="Sửa sản phẩm" component={EditProduct} options={({ route }) => ({ title: route.params.detail.name })}/>
+        <Stack.Screen name="Camera" component={CameraApp}/>
+        <Stack.Screen name="Scan" component={Scan}/>
+    </Stack.Navigator>
   );
 }
 
 function StackScan({navigation}) {
   return (
-    <StackCategories.Navigator>
-       <StackCategories.Screen name="QR" component={Scan}
-       options={{headerShown: false}}/>
-    </StackCategories.Navigator>
+    <Stack.Navigator>
+       <Stack.Screen name="Tạo giỏ hàng" component={NewCart}
+        options={{headerShown: false}}/>
+      <Stack.Screen name="Giỏ hàng" component={CartMarket}/>
+    </Stack.Navigator>
   );
 }
 
 function StackStat({navigation}) {
   return (
-    <StackCategories.Navigator>
-       <StackCategories.Screen name="Thống kê" component={Statistic}
+    <Stack.Navigator>
+       <Stack.Screen name="Thống kê" component={Statistic}
        options={{
           headerLeft:() => (
             <TouchableOpacity style={styles.icon} onPress={() => navigation.toggleDrawer()}>
@@ -107,7 +111,7 @@ function StackStat({navigation}) {
             </TouchableOpacity>
           ),
         }}/>
-    </StackCategories.Navigator>
+    </Stack.Navigator>
   );
 }
 

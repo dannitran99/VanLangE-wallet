@@ -7,20 +7,35 @@ function ProductItem(props) {
   return (
 
        <View style={styles.container}>
-          <Text style={styles.textStyle}>{product.name}</Text>
+        <View style={styles.image}>
           <Image style={styles.categoryImage} source={{uri:product.image}}/>
-          <View style={{flex:1, flexDirection:"row",justifyContent:"space-between"}}>
+        </View>
+          <View style={{marginHorizontal:5}}>
+            {product.name.length < 15 ?(<Text style={styles.textStyle}>{product.name}</Text>):
+              (<Text style={styles.textStyle}>{product.name.substring(0,14) +'...'}</Text>)}
+            <View style={{flexDirection:"row"}}>
             <NumberFormat
                value={product.price}
                displayType={'text'}
                thousandSeparator={true}
                suffix={' ₫'}
-               renderText={formattedValue => <Text style={[styles.bottomDiv,styles.priceText]}>{formattedValue}</Text>} // <--- Don't forget this!
+               renderText={formattedValue => <Text style={styles.priceText}>{formattedValue}</Text>} // <--- Don't forget this!
              />
-            <TouchableOpacity style={styles.bottomDiv} onPress={props.onPress}>
-                <Ionicons name='ios-create' size={30} />
-            </TouchableOpacity>
+             {product.available?(<Text>Còn hàng</Text>):(<Text>Hết hàng</Text>)}
+             </View>
           </View>
+          <TouchableOpacity style={styles.bottomDiv} onPress={props.onPress}>
+            <View
+              style={{
+                borderBottomColor: '#cfcfcf',
+                borderBottomWidth: 1,
+              }}
+            />
+            <View style={{flexDirection:"row", alignItems:'center'}}>
+              <Ionicons name='ios-create' size={30} color='#4388D6'/>
+              <Text style={styles.botText}>  Chỉnh sửa</Text>
+            </View>
+          </TouchableOpacity>
        </View>
 
   );
@@ -31,28 +46,30 @@ const styles = StyleSheet.create({
     container:{
       margin:10,
       padding:10,
-      alignItems:'center',
       borderRadius:15,
       elevation:4   //only for android
     },
+    image:{
+      padding:20,
+      alignItems:'center'
+    },
     textStyle:{
-      fontSize:20,
-      fontWeight:'bold',
-      padding:10
+      fontSize:18,
+      color:'#4388D6'
     },
     categoryImage:{
       width:128,
       height:128
     },
-    bottomDiv:{
-      marginHorizontal:5,
-      alignSelf: 'flex-end',
-      alignItems: 'center',
-    },
     priceText:{
       flex:1,
-      color:'#9DA9B2',
-      textDecorationLine:'underline'
+      fontWeight:'bold',
+    },
+    bottomDiv:{
+      marginTop:15
+    },
+    botText:{
+      color:'#4388D6'
     }
 });
 

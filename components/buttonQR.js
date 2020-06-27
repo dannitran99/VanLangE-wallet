@@ -1,9 +1,11 @@
 import * as React from 'react';
 import {StyleSheet ,View ,TouchableOpacity, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { useIsFocused } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 function ButtonQR({navigation}) {
   const buttonSize=new Animated.Value(1);
+  const isFocused = useIsFocused();
   const handleAnim=()=>{
         Animated.sequence([
             Animated.timing(buttonSize,{
@@ -14,7 +16,7 @@ function ButtonQR({navigation}) {
               toValue:1,
             }),
         ]).start();
-        setTimeout(()=>navigation.navigate('Thanh toán QR'), 200);
+        setTimeout(()=>navigation.navigate('Thanh toán QR'), 300);
   }
   const styleSize = {
     transform:[{scale:buttonSize}]
@@ -23,7 +25,8 @@ function ButtonQR({navigation}) {
        <View style={styles.container}>
         <Animated.View style={[styles.button,styleSize]}>
           <TouchableOpacity onPress={handleAnim} underlayColor='#4388D6'>
-             <Icon name='qrcode' size={35} color='#FFF' />
+          {isFocused ?(<LottieView style={{width:65}} source={require('../anim/511-money.json')} autoPlay loop />) :(
+               <LottieView style={{width:65}} source={require('../anim/511-money.json')} autoPlay loop />)}
           </TouchableOpacity>
         </Animated.View>
        </View>

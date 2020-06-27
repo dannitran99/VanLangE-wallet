@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-export default function QRScan() {
+import LottieView from 'lottie-react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
+export default function NewCart({navigation,route}) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [products,setProducts] = useState([]);
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
+    setProducts(route.params.products)
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+
   };
 
   if (hasPermission === null) {
@@ -26,16 +31,19 @@ export default function QRScan() {
   }
 
   return (
+
     <View
       style={styles.container}>
       <BarCodeScanner
         style={{position:'absolute'}}
-        barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
+        barCodeTypes={[BarCodeScanner.Constants.BarCodeType.ean13,
+                       BarCodeScanner.Constants.BarCodeType.ean8,
+                      ]}
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
-      <Ionicons style={styles.icon} name='ios-qr-scanner' size={300} color='#FFF' />
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+      {isFocused ?(<LottieView style={{width:300}} source={require('../anim/4692-scanner.json')} autoPlay loop />) :<View/>}
+
     </View>
   );
 }
@@ -46,10 +54,5 @@ const styles = StyleSheet.create({
        alignItems:'center',
        flex: 1,
        justifyContent: 'center',
-    },
-    icon:{
-      position:'absolute',
-      alignItems:'center',
-      justifyContent:'center'
     }
 });

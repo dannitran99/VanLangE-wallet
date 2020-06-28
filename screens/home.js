@@ -15,6 +15,7 @@ import Statistic from './statistic';
 import Scan from './scanBarCode';
 import NewCart from './newCart';
 import CartMarket from './cartMarket';
+import Payment from './payment';
 import ButtonQR from '../components/buttonQR';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -96,6 +97,7 @@ function StackScan({navigation}) {
        <Stack.Screen name="Tạo giỏ hàng" component={NewCart}
         options={{headerShown: false}}/>
       <Stack.Screen name="Giỏ hàng" component={CartMarket}/>
+      <Stack.Screen name="Thanh toán" component={Payment}/>
     </Stack.Navigator>
   );
 }

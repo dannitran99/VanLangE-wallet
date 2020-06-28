@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button ,Alert} from 'react-native';
 import {Dialog} from 'react-native-simple-dialogs';
 import { CheckBox } from 'react-native-elements';
 import LottieView from 'lottie-react-native';
 import axios from 'axios';
-import { useFocusEffect } from '@react-navigation/native';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native'
 export default function NewCart({navigation}) {
-  const [dialogVisible, setDialogVisible] = useState(true);
-  const [cart,setCart] = useState('');
-  const [products,setProducts] = useState([]);
+  const [dialogVisible, setDialogVisible] = React.useState(true);
+  const [cart,setCart] = React.useState('');
+  const [products,setProducts] = React.useState([]);
   const [load, setLoad] = React.useState(false);
-  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     if(cart !== ''){
@@ -20,7 +18,7 @@ export default function NewCart({navigation}) {
         case 'Market':
           axios.get('https://vlu-ewallet.herokuapp.com/market-manager/getData').then(res =>{
              setProducts(res.data);
-             navigation.navigate('Giỏ hàng',{products:products});
+             navigation.navigate('Giỏ hàng',{products:res.data});
              setLoad(false);
           }).catch(err =>{
                console.error(err);

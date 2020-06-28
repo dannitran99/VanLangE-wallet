@@ -31,6 +31,7 @@
     "react-native-safe-area-context": "^1.0.2",
     "react-native-screens": "^2.7.0",
     "react-native-simple-dialogs": "^1.3.0",
+    "react-native-swiper": "^1.6.0",
     "react-native-web": "~0.11.7",
     "react-number-format": "^4.4.1"
   },

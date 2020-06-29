@@ -45,7 +45,7 @@ export default function NewCart({navigation,route}){
             break;
           }
         }
-        if(!find_incart) arr.push({name:products[i].name,amount:1,price:products[i].price});
+        if(!find_incart) arr.push({id:products[i]._id,name:products[i].name,amount:1,price:products[i].price});
         setCartItem(arr);
         let newAmount = amount+1;
         let newPrice = price+products[i].price;
@@ -110,7 +110,7 @@ export default function NewCart({navigation,route}){
                            break;
                          }
                        }
-                       if(!find) arr.push({name:item.name,amount:1,price:item.price});
+                       if(!find) arr.push({id:item._id,name:item.name,amount:1,price:item.price});
                        let newAmount = amount + 1;
                        let newPrice = price + item.price;
                        setAmount(newAmount);

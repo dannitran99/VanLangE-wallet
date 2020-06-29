@@ -1,15 +1,49 @@
 import React from 'react';
 import { StyleSheet,FlatList,Text,View,TouchableOpacity } from 'react-native';
 import NumberFormat from 'react-number-format';
+import CartPayment from '../components/cartPayment';
 function Payment({navigation,route}) {
   const [price, setPrice] = React.useState(route.params.price);
-
+  const [cartItem, setCartItem] = React.useState(route.params.cartItem);
+  const [amount, setAmount] = React.useState(route.params.amount);
   return (
     <View style={styles.container}>
       <View style={{flex:1}}>
         <View style={styles.header}>
-         <Text style={styles.titleHeader}>Tóm tắt đơn hàng</Text>
+         <Text style={styles.titleHeader}>Tóm tắt đơn hàng ({amount} món)</Text>
         </View>
+        <FlatList
+           data={cartItem}
+           renderItem={({item})=> <CartPayment cartItem={item}
+           onPressAdd={()=>{
+             let arr = cartItem;
+             for(let i = 0; i<arr.length;i++){
+               if(arr[i].name == item.name){
+                 arr[i].amount ++;
+                 break;
+               }
+             }
+             let newAmount = amount + 1;
+             let newPrice = price + item.price;
+             setAmount(newAmount);
+             setPrice(newPrice)
+             setCartItem(arr);
+           }}
+           onPressMinus={()=>{
+             let arr = cartItem;
+             for(let i = 0; i<arr.length;i++){
+               if(arr[i].name == item.name){
+                 arr[i].amount --;
+                 break;
+               }
+             }
+             let newAmount = amount - 1;
+             let newPrice = price - item.price;
+             setAmount(newAmount);
+             setPrice(newPrice)
+             setCartItem(arr);
+           }} />}
+           keyExtractor={item => `${item.id}`}/>
       </View>
       <View style={styles.footer}>
         <View style={{flexDirection:"row",alignItems:'center'}}>

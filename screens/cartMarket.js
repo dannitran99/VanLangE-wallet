@@ -29,7 +29,18 @@ export default function NewCart({navigation,route}){
     setProducts(route.params.products);
     setFilterProducts(route.params.products);
   }, []);
-
+  useFocusEffect(
+    React.useCallback(() => {
+      let sumAmount = 0;
+      let sumPrice = 0;
+      for(let i = 0; i<cartItem.length;i++){
+        sumPrice += cartItem[i].price * cartItem[i].amount;
+        sumAmount += cartItem[i].amount;
+      }
+      setAmount(sumAmount);
+      setPrice(sumPrice);
+    }, [])
+  );
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     let arr = cartItem;
@@ -123,7 +134,7 @@ export default function NewCart({navigation,route}){
                     lightTheme round />}/>
             </View>
         </Swiper>
-        {cartItem.length ==0 ? undefined :
+        {amount ==0 ? undefined :
           (<TouchableOpacity style={styles.cartPreview} onPress={()=>navigation.navigate('Thanh toán',{cartItem:cartItem,amount:amount,price:price})}>
                 <View style={{flexDirection:"row",flex:1}}>
                   <Text style={{color:'#fff',fontWeight:'bold'}}>Xem giỏ hàng</Text>

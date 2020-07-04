@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button ,Alert} from 'react-native';
+import { Text, View, StyleSheet, Button ,Alert,AsyncStorage} from 'react-native';
 import {Dialog} from 'react-native-simple-dialogs';
 import { CheckBox } from 'react-native-elements';
 import LottieView from 'lottie-react-native';
 import axios from 'axios';
+var jwtDecode = require('jwt-decode');
 import { useFocusEffect } from '@react-navigation/native'
 export default function NewCart({navigation}) {
   const [dialogVisible, setDialogVisible] = React.useState(true);
   const [cart,setCart] = React.useState('');
   const [products,setProducts] = React.useState([]);
   const [load, setLoad] = React.useState(false);
-
+  const [role, setRole] = React.useState('');
   React.useEffect(() => {
+    if(role == ''){
+      AsyncStorage.getItem('userToken', (err, result) => {
+        var decoded = jwtDecode(result);
+        setRole(decoded.role);
+      });
+    }
     if(cart !== ''){
       setLoad(true);
       switch (cart) {
@@ -50,25 +57,38 @@ export default function NewCart({navigation}) {
           title="Tạo giỏ hàng cho">
           <View>
             <CheckBox
-            title='Siêu thị'
-            checkedIcon='dot-circle-o'
-            uncheckedIcon='circle-o'
-            onPress={()=>{
-              setDialogVisible(false);
-              if(cart !== 'Market')setCart('Market')
-              else navigation.navigate('Giỏ hàng',{products:products});}}
+              title='Siêu thị'
+              checkedIcon='dot-circle-o'
+              uncheckedIcon='circle-o'
+              onPress={()=>{
+                if(role == 'manager' || role =='market-manager'){
+                  setDialogVisible(false);
+                  if(cart !== 'Market')setCart('Market')
+                  else navigation.navigate('Giỏ hàng',{products:products});
+                }else Alert.alert('Thông báo','Bạn không có quyền vào mục này!');
+              }}
             />
             <CheckBox
-            title='Căn tin'
-            checkedIcon='dot-circle-o'
-            uncheckedIcon='circle-o'
-            onPress={()=>{if(cart !== 'Canteen'){setCart('Canteen')}setDialogVisible(false);}}
+              title='Căn tin'
+              checkedIcon='dot-circle-o'
+              uncheckedIcon='circle-o'
+              onPress={()=>{
+                if(role == 'manager' || role =='canteen-manager') {
+                  setDialogVisible(false);
+                  if(cart !== 'Canteen'){setCart('Canteen')}
+                }else Alert.alert('Thông báo','Bạn không có quyền vào mục này!');
+              }}
             />
             <CheckBox
             title='Thư viện'
             checkedIcon='dot-circle-o'
             uncheckedIcon='circle-o'
-            onPress={()=>{if(cart !== 'Library'){setCart('Library')}setDialogVisible(false);}}
+            onPress={()=>{
+              if(role == 'manager' || role =='library-manager'){
+                setDialogVisible(false);
+                if(cart !== 'Library'){setCart('Library')}
+              }else Alert.alert('Thông báo','Bạn không có quyền vào mục này!');
+            }}
             />
           </View>
       </Dialog>

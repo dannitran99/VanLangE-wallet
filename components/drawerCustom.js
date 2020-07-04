@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {StyleSheet,Image, AsyncStorage, Text, View,ImageBackground  } from 'react-native';
 import BackgroundImage from '../assets/blue_background.jpg';
-import Logo from '../assets/logo-blue_transparent_cutsize.png'
+import Logo from '../assets/logo-blue_transparent_cutsize.png';
+var jwtDecode = require('jwt-decode');
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -14,20 +15,17 @@ import axios from 'axios';
 function CustomDrawerContent(props) {
   const [username, setUsername] = React.useState('');
   const [name, setName] = React.useState('');
+  const [role, setRole] = React.useState('');
   const [wallet, setWallet] = React.useState(-1);
   const [point, setPoint] = React.useState(-1);
   React.useEffect(() => {
     AsyncStorage.getItem('userToken', (err, result) => {
-      axios.post('https://vlu-ewallet.herokuapp.com/login/jwtverify', {
-         token: result
-       }).then(res =>{
-         setUsername(res.data.user);
-         setName(res.data.name);
-         setWallet(res.data.wallet);
-         setPoint(res.data.point);
-       }).catch(err =>{
-           console.error(err);
-         })
+      var decoded = jwtDecode(result);
+        setUsername(decoded.user);
+        setName(decoded.name);
+        setRole(decoded.role);
+        setWallet(decoded.wallet);
+        setPoint(decoded.point);
     });
   }, []);
   return (
@@ -40,7 +38,10 @@ function CustomDrawerContent(props) {
                           <Image style={styles.inputIcon} source={{uri: 'https://cdn4.iconfinder.com/data/icons/eldorado-user/40/user-512.png'}}/>
                           <View style={{marginLeft:15, flexDirection:'column'}}>
                               <Text style={styles.title}>{name}</Text>
-                              <Text style={styles.caption}>{username}</Text>
+                              <View style={{ flexDirection:'row'}}>
+                                <Text style={[styles.caption,{flex:1}]}>{username}</Text>
+                                <Text style={styles.caption}>({role})</Text>
+                              </View>
                           </View>
                       </View>
 

@@ -83,12 +83,12 @@ function SignInScreen() {
           username: username,
           password: password
         }).then(res =>{
-          if(res.data == 'Sai mật khẩu' || res.data == 'Tài khoản không tồn tại' ) {
+          if(res.data.thongbao != 'Success' ) {
             setLoad(false);
-            Alert.alert("Thông báo",res.data);
+            Alert.alert("Thông báo",res.data.thongbao);
           }else{
               setLoad(false);
-              var serverToken = res.data;
+              var serverToken = res.data.token;
               signIn({ serverToken });
           }
         }).catch(err =>{

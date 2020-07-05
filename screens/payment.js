@@ -65,6 +65,9 @@ function Payment({navigation,route}) {
       <View style={{flex:1}}>
         <View style={styles.header}>
          <Text style={styles.titleHeader}>Tóm tắt đơn hàng ({amount} món)</Text>
+         <TouchableOpacity onPress={()=>navigation.goBack()}>
+            <Text style={styles.addItem}>Thêm món</Text>
+         </TouchableOpacity>
         </View>
         <FlatList
            data={cartItem}
@@ -135,14 +138,21 @@ const styles = StyleSheet.create({
     marginVertical:10
   },
   header:{
+    flexDirection:'row',
     backgroundColor:'#dbdbdb',
     height:40,
+    alignItems:'center',
     justifyContent:'center'
   },
   titleHeader:{
+    flex:1,
     paddingHorizontal:15,
     fontSize:20,
     color:'#6b6b6b'
+  },
+  addItem:{
+    padding:10,
+    color:'#4388D6'
   },
   footer:{
     alignItems:'center',

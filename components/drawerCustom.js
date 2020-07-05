@@ -38,10 +38,8 @@ function CustomDrawerContent(props) {
                           <Image style={styles.inputIcon} source={{uri: 'https://cdn4.iconfinder.com/data/icons/eldorado-user/40/user-512.png'}}/>
                           <View style={{marginLeft:15, flexDirection:'column'}}>
                               <Text style={styles.title}>{name}</Text>
-                              <View style={{ flexDirection:'row'}}>
-                                <Text style={[styles.caption,{flex:1}]}>{username}</Text>
-                                <Text style={styles.caption}>({role})</Text>
-                              </View>
+                              <Text style={[styles.caption,{flex:1}]}>{username}</Text>
+                              <Text style={styles.caption}>{role}</Text>
                           </View>
                       </View>
 

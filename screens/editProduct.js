@@ -67,20 +67,19 @@ function EditProduct({route,navigation}) {
       setPicture('data:image/jpg;base64,'+result.base64);
     }
   };
-  const updateProduct = () =>{
+  function updateProduct(){
     setLoad(true);
     if(name=='' || price == ''  || barcode == ''|| picture == 'https://cdn1.iconfinder.com/data/icons/social-17/48/photos2-512.png'){
       setLoad(false);
       return Alert.alert('Thông báo',"Bạn cần nhập đầy đủ thông tin!")
     }
-    axios.post('https://vlu-ewallet.herokuapp.com/market-manager/editProduct', {
-       id: id,
-       name: name,
-       price: price,
-       avail: avail,
-       image:picture,
-       barcode:barcode
-     }).then(res =>{
+    const value={id: id,
+    name: name,
+    price: price,
+    avail: avail,
+    image:picture,
+    barcode:barcode}
+    axios.post('https://vlu-ewallet.herokuapp.com/market-manager/editProduct', value).then(res =>{
        if(res.data == 'Success' ) {
          setLoad(false);
          navigation.navigate('Siêu thị',{post:id});

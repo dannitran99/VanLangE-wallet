@@ -135,7 +135,7 @@ export default function NewCart({navigation,route}){
             </View>
         </Swiper>
         {amount ==0 ? undefined :
-          (<TouchableOpacity style={styles.cartPreview} onPress={()=>navigation.navigate('Thanh toán',{cartItem:cartItem,amount:amount,price:price})}>
+          (<TouchableOpacity style={styles.cartPreview} onPress={()=>navigation.navigate('Thanh toán',{cartItem:cartItem,amount:amount,price:price,type:'market'})}>
                 <View style={{flexDirection:"row",flex:1}}>
                   <Text style={{color:'#fff',fontWeight:'bold'}}>Xem giỏ hàng</Text>
                   <Text style={{color:'#fff',marginLeft:10}}>{amount} món</Text>

@@ -32,7 +32,8 @@ function Payment({navigation,route}) {
        id:newid,
        cartItem: cartItem,
        price:price,
-       amount:amount
+       amount:amount,
+       type:route.params.type
      }).then(res =>{
        if(res.data == 'Success' ) {
          setLoad(false);

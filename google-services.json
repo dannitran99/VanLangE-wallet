@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "831614375060",
+    "firebase_url": "https://vl-ew-manager.firebaseio.com",
+    "project_id": "vl-ew-manager",
+    "storage_bucket": "vl-ew-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831614375060:android:f40dbbc3534f7e7024d081",
+        "android_client_info": {
+          "package_name": "com.team04vlu.vanlangewallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831614375060-u62bt14g71orqhc77hm5mreu93prmhrq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqN30JLyDVzaZkGJIbGKxgsvPr6gPRoEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831614375060-u62bt14g71orqhc77hm5mreu93prmhrq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

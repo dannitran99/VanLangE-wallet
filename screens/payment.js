@@ -1,19 +1,24 @@
 import React from 'react';
-import { StyleSheet,FlatList,Text,View,TouchableOpacity } from 'react-native';
+import { StyleSheet,FlatList,Text,View,TouchableOpacity ,Vibration,Alert} from 'react-native';
 import NumberFormat from 'react-number-format';
 import LottieView from 'lottie-react-native';
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
 import CartPayment from '../components/cartPayment';
-import {Dialog} from 'react-native-simple-dialogs';
+import {Dialog,ConfirmDialog} from 'react-native-simple-dialogs';
 import QRCode from 'react-native-qrcode-generator';
 const shortid = require('shortid');
 import axios from 'axios';
 function Payment({navigation,route}) {
+  const [expoPushToken, setExpoPushToken] = React.useState('');
+  const [notification, setNotification] = React.useState(false);
   const [id, setId] = React.useState("");
   const [price, setPrice] = React.useState(route.params.price);
   const [cartItem, setCartItem] = React.useState(route.params.cartItem);
   const [amount, setAmount] = React.useState(route.params.amount);
   const [dialogVisible, setDialogVisible] = React.useState(false);
   const [load, setLoad] = React.useState(false);
+  const [getNotice, setGetNotice] = React.useState(false);
   React.useEffect(() => {
     let arr = [];
     for(let i = 0; i<cartItem.length;i++){
@@ -22,7 +27,16 @@ function Payment({navigation,route}) {
       }
     }
     setCartItem(arr);
+    registerForPushNotificationsAsync()
+    const _notificationSubscription = Notifications.addListener(_handleNotification);
   }, [route.params?.cartItem]);
+
+  const _handleNotification = notification => {
+    Vibration.vibrate();
+    setNotification(notification);
+    setGetNotice(true);
+  };
+
   function payment(){
     let newid = "vlew" + shortid.generate();
     setId(newid);
@@ -33,7 +47,8 @@ function Payment({navigation,route}) {
        cartItem: cartItem,
        price:price,
        amount:amount,
-       type:route.params.type
+       type:route.params.type,
+       expoPushToken:expoPushToken
      }).then(res =>{
        if(res.data == 'Success' ) {
          setLoad(false);
@@ -45,13 +60,49 @@ function Payment({navigation,route}) {
          console.error(err);
       })
   }
+
+  const registerForPushNotificationsAsync = async () => {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      var token = await Notifications.getExpoPushTokenAsync();
+      setExpoPushToken(token);
+    if (Platform.OS === 'android') {
+      Notifications.createChannelAndroidAsync('default', {
+        name: 'default',
+        sound: true,
+        priority: 'max',
+        vibrate: [0, 250, 250, 250],
+      });
+    }
+  };
   return (
     <View style={styles.container}>
       <Dialog
           visible={dialogVisible}>
 
         {load ?(<LottieView style={{width:300}} source={require('../anim/4495-shopping-basket.json')} autoPlay loop />) :(
-            <View style={{justifyContent:'center',alignItems:'center'}}>
+          <View>
+          {getNotice?(
+            <ConfirmDialog
+                title="Thanh toán thành công"
+                visible={true}
+                positiveButton={{
+                    title: "OK",
+                    onPress: () => {navigation.navigate('Tạo giỏ hàng');navigation.navigate('Danh mục');setDialogVisible(false)}
+                }}
+            >
+                <Text>Tài khoản thanh toán: {notification.data.name}</Text>
+            </ConfirmDialog>
+          ):(
+             <View style={{justifyContent:'center',alignItems:'center'}}>
               <QRCode
                 value={id}
                 size={300}
@@ -60,7 +111,8 @@ function Payment({navigation,route}) {
               <TouchableOpacity onPress={()=>setDialogVisible(false)}>
                 <Text style={{fontWeight:'bold',fontSize:30,paddingTop:30,paddingHorizontal:100}}>Hủy</Text>
               </TouchableOpacity>
-            </View>
+            </View>)}
+          </View>
               )}
       </Dialog>
       <View style={{flex:1}}>
@@ -130,7 +182,11 @@ function Payment({navigation,route}) {
       </View>
     </View>
   );
+
+
 }
+
+
 
 
 const styles = StyleSheet.create({

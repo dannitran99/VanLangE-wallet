@@ -1,16 +1,19 @@
 import * as React from 'react';
-import {StyleSheet,Image, AsyncStorage, Text, View,ImageBackground  } from 'react-native';
+import {StyleSheet,Image, AsyncStorage, Text, View,ImageBackground,Alert  } from 'react-native';
 import BackgroundImage from '../assets/blue_background.jpg';
 import Logo from '../assets/logo-blue_transparent_cutsize.png';
+import { Avatar } from 'react-native-elements'
+import { MaterialCommunityIcons, Feather, AntDesign, } from '@expo/vector-icons';
+import axios from 'axios';
 var jwtDecode = require('jwt-decode');
 import {
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
-  Drawer
+  DrawerItem
 } from '@react-navigation/drawer';
-
-import axios from 'axios';
+import {
+    Drawer
+} from 'react-native-paper';
 
 function CustomDrawerContent(props) {
   const [username, setUsername] = React.useState('');
@@ -27,7 +30,7 @@ function CustomDrawerContent(props) {
         setWallet(decoded.wallet);
         setPoint(decoded.point);
     });
-  }, []);
+  },[]);
   return (
     <View style={{flex:1}}>
      <DrawerContentScrollView {...props}>
@@ -56,8 +59,38 @@ function CustomDrawerContent(props) {
                   </View>
                 </ImageBackground>
               </View>
-              <DrawerItemList {...props} />
+              <Drawer.Section style={styles.drawerSection}>
+                  <DrawerItem
+                      icon={({ size }) => (
+                          <AntDesign name="home" color='#1f2233' size={size} />
+                      )}
+                      label="Trang chủ"
+                      onPress={() => { props.navigation.navigate('Trang chủ') }}
+                      labelStyle={{ color: '#1f2233' }}
+                  />
+                  <DrawerItem
+                      icon={({ size }) => (
+                          <AntDesign name="user" color='#1f2233' size={size} />
+                      )}
+                      label="Danh sách tài khoản"
+                      onPress={() => {
+                        if(role == 'manager')props.navigation.navigate('Tài khoản');
+                        else Alert.alert("Thông báo","Bạn không có quyền truy cập vào mục này!")}}
+                      labelStyle={{ color: '#1f2233' }}
+                  />
+
+              </Drawer.Section>
           </DrawerContentScrollView>
+          <Drawer.Section style={styles.bottomDrawer}>
+            <DrawerItem
+                 icon={({ size }) => (
+                     <AntDesign name="poweroff" color='#1f2233' size={size} />
+                 )}
+                 label="Đăng xuất"
+                 labelStyle={{ fontWeight: 'bold', color: '#1f2233' }}
+                 onPress={()=>{props.navigation.navigate('Đăng xuất')}}
+             />
+           </Drawer.Section>
           <View style={styles.infoDiv}>
               <Image source={Logo} style={styles.logo}/>
               <Text style={styles.info}>Phát triển và vận hành bởi Team#4</Text>
@@ -134,7 +167,12 @@ const styles = StyleSheet.create({
     logo:{
       width:130,
       height:50
-    }
+    },
+    bottomDrawer: {
+        marginBottom: 20,
+        borderTopColor: '#f4f4f4',
+        borderTopWidth: 1,
+    },
   });
 
 export default CustomDrawerContent;

@@ -11,6 +11,7 @@ import CustomDrawerContent from './components/drawerCustom'
 import axios from 'axios';
 
 import Home from './screens/home';
+import AccountStack from './screens/accountStack';
 import PlashScreenImage from './assets/logo_transparent.png';
 const AuthContext = React.createContext();
 
@@ -179,12 +180,18 @@ export default function App({ navigation }) {
               </Stack.Navigator>
           ) : (
             <Drawer.Navigator initialRouteName="Home" drawerContent={props => <CustomDrawerContent {...props} />}>
-               <Drawer.Screen name="Trang chủ" component={Home}
-                  options={{ drawerIcon:()=>{return <Icon name='home' size={25} color='#4388D6'/>} }}
+               <Drawer.Screen name="Trang chủ" component={Home}/>
+               <Drawer.Screen name="Đăng xuất" component={Logout}/>
+               <Drawer.Screen name="Tài khoản" component={AccountStack}
+                 options={{
+                     headerStyle: {
+                         backgroundColor: "#e1e6ea",
+                     },
+                     headerTitleStyle: { color: '#434c73' },
+                     headerTitleAlign: "center",
+                     headerTintColor: '#434c73',
+                 }}
                />
-               <Drawer.Screen name="Đăng xuất" component={Logout}
-                  options={{ drawerIcon:()=>{return <Icon name='sign-out' size={25} color='#4388D6'/>} }}
-                />
             </Drawer.Navigator>
           )}
 

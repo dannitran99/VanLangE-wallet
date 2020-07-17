@@ -18,6 +18,7 @@ import {
 function CustomDrawerContent(props) {
   const [username, setUsername] = React.useState('');
   const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
   const [role, setRole] = React.useState('');
   const [wallet, setWallet] = React.useState(-1);
   const [point, setPoint] = React.useState(-1);
@@ -26,6 +27,7 @@ function CustomDrawerContent(props) {
       var decoded = jwtDecode(result);
         setUsername(decoded.user);
         setName(decoded.name);
+        setEmail(decoded.email);
         setRole(decoded.role);
         setWallet(decoded.wallet);
         setPoint(decoded.point);
@@ -41,20 +43,14 @@ function CustomDrawerContent(props) {
                           <Image style={styles.inputIcon} source={{uri: 'https://cdn4.iconfinder.com/data/icons/eldorado-user/40/user-512.png'}}/>
                           <View style={{marginLeft:15, flexDirection:'column'}}>
                               <Text style={styles.title}>{name}</Text>
-                              <Text style={[styles.caption,{flex:1}]}>{username}</Text>
-                              <Text style={styles.caption}>{role}</Text>
+                              <Text style={[styles.caption,{flex:1,marginTop:5}]}>{email}</Text>
+
                           </View>
                       </View>
 
                       <View style={styles.row}>
-                          <View style={styles.section}>
-                              <Text style={[styles.paragraph, styles.caption]}>{wallet}</Text>
-                              <Text style={styles.caption}>VNĐ</Text>
-                          </View>
-                          <View style={styles.section}>
-                              <Text style={[styles.paragraph, styles.caption]}>{point}</Text>
-                              <Text style={styles.caption}>VPoints</Text>
-                          </View>
+                        <Text style={styles.user}>UID: {username}</Text>
+                        <Text style={styles.caption}>Quyền: {role}</Text>
                       </View>
                   </View>
                 </ImageBackground>
@@ -119,10 +115,18 @@ const styles = StyleSheet.create({
       fontSize: 14,
       lineHeight: 14,
     },
+    user: {
+      color:'white',
+      fontSize: 14,
+      lineHeight: 14,
+      flex:1
+    },
     row: {
       marginTop: 20,
       flexDirection: 'row',
       alignItems: 'center',
+      marginBottom:20,
+      paddingHorizontal:10,
     },
     section: {
       paddingBottom:15,

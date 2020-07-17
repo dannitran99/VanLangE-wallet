@@ -1,26 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet,FlatList ,Alert,TouchableOpacity,Button} from 'react-native';
+import { Text, View, StyleSheet,FlatList ,Alert,TouchableOpacity,Button,RefreshControl} from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import LottieView from 'lottie-react-native';
 import Swiper from 'react-native-swiper';
 import NumberFormat from 'react-number-format';
 import { SearchBar } from 'react-native-elements';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
-
+import axios from 'axios';
 import ProductCartItem from '../components/productCartItem';
 export default function NewCart({navigation,route}){
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = React.useState(false);
   const [products,setProducts] = React.useState([]);
+  const [load, setLoad] = React.useState(false);
   const [filterProducts,setFilterProducts] = React.useState([]);
   const [cartItem,setCartItem] = React.useState([]);
   const [amount, setAmount] = React.useState(0);
   const [price, setPrice] = React.useState(0);
   const [keyword, setKeyword] = React.useState('');
   const isFocused = useIsFocused();
-
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setLoad(true);
+    axios.get('https://vlu-ewallet.herokuapp.com/'+route.params.type+'-manager/getData').then(res =>{
+        setProducts(res.data);
+        setFilterProducts(res.data);
+        setLoad(false);
+     }).catch(err =>{
+         console.error(err);
+      })
+      setRefreshing(false);
+  }, []);
   React.useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -87,6 +101,11 @@ export default function NewCart({navigation,route}){
 
   return (
     <View style={{flex:1,alignItems:'center',justifyContent:'flex-end'}}>
+        <Spinner
+            visible={load}
+            color='00b5ec'
+            animation='slide'
+        />
        <Swiper style={styles.wrapper} showsButtons={true} loop={false}>
             <View
               style={styles.container}>
@@ -110,6 +129,8 @@ export default function NewCart({navigation,route}){
             </View>
             <View style={{padding:5,paddingVertical:10}}>
               <FlatList
+                 refreshControl={
+                   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                  data={filterProducts}
                  renderItem={({item})=> <ProductCartItem product={item} onPress={()=>{
                        let arr = cartItem;
@@ -135,7 +156,7 @@ export default function NewCart({navigation,route}){
             </View>
         </Swiper>
         {amount ==0 ? undefined :
-          (<TouchableOpacity style={styles.cartPreview} onPress={()=>navigation.navigate('Thanh toán',{cartItem:cartItem,amount:amount,price:price,type:'market'})}>
+          (<TouchableOpacity style={styles.cartPreview} onPress={()=>navigation.navigate('Thanh toán',{cartItem:cartItem,amount:amount,price:price,type:route.params.type})}>
                 <View style={{flexDirection:"row",flex:1}}>
                   <Text style={{color:'#fff',fontWeight:'bold'}}>Xem giỏ hàng</Text>
                   <Text style={{color:'#fff',marginLeft:10}}>{amount} món</Text>

@@ -22,6 +22,18 @@ export default function BarcodeScan({navigation,route}) {
         case 'editProduct' :
           navigation.navigate('Sửa sản phẩm', { barcode: data });
           break;
+        case 'addCanteen' :
+          navigation.navigate('Thêm sản phẩm căn tin', { barcode: data });
+          break;
+        case 'editCanteen' :
+          navigation.navigate('Sửa sản phẩm căn tin', { barcode: data });
+          break;
+        case 'addLibrary' :
+          navigation.navigate('Thêm sản phẩm thư viện', { barcode: data });
+          break;
+        case 'editLibrary' :
+          navigation.navigate('Sửa sản phẩm thư viện', { barcode: data });
+          break;
         default: break;
     }
   };

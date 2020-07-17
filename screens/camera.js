@@ -27,6 +27,18 @@ export default class CameraScreen extends React.Component {
         case 'editProduct' :
           this.props.navigation.navigate('Sửa sản phẩm', { post: photo.base64 });
           break;
+        case 'addCanteen' :
+          this.props.navigation.navigate('Thêm sản phẩm căn tin', { post: photo.base64 });
+          break;
+        case 'editCanteen' :
+          this.props.navigation.navigate('Sửa sản phẩm căn tin', { post: photo.base64 });
+          break;
+        case 'addLibrary' :
+          this.props.navigation.navigate('Thêm sản phẩm thư viện', { post: photo.base64 });
+          break;
+        case 'editLibrary' :
+          this.props.navigation.navigate('Sửa sản phẩm thư viện', { post: photo.base64 });
+          break;
         default: break;
     }
 

@@ -25,17 +25,29 @@ export default function NewCart({navigation}) {
         case 'Market':
           axios.get('https://vlu-ewallet.herokuapp.com/market-manager/getData').then(res =>{
              setProducts(res.data);
-             navigation.navigate('Giỏ hàng',{products:res.data});
+             navigation.navigate('Giỏ hàng',{products:res.data,type:'market'});
              setLoad(false);
           }).catch(err =>{
                console.error(err);
           })
           break;
         case 'Canteen':
-          setLoad(false);
+          axios.get('https://vlu-ewallet.herokuapp.com/canteen-manager/getData').then(res =>{
+             setProducts(res.data);
+             navigation.navigate('Giỏ hàng',{products:res.data,type:'canteen'});
+             setLoad(false);
+          }).catch(err =>{
+               console.error(err);
+          })
           break;
         case 'Library':
-          setLoad(false);
+          axios.get('https://vlu-ewallet.herokuapp.com/library-manager/getData').then(res =>{
+             setProducts(res.data);
+             navigation.navigate('Giỏ hàng',{products:res.data,type:'library'});
+             setLoad(false);
+          }).catch(err =>{
+               console.error(err);
+          })
           break;
         default:break;
 
@@ -54,7 +66,8 @@ export default function NewCart({navigation}) {
       style={styles.container}>
       <Dialog
           visible={dialogVisible}
-          title="Tạo giỏ hàng cho">
+          title="Tạo giỏ hàng cho"
+          onTouchOutside={() => setDialogVisible(false)}>
           <View>
             <CheckBox
               title='Siêu thị'
@@ -64,7 +77,7 @@ export default function NewCart({navigation}) {
                 if(role == 'manager' || role =='market-manager'){
                   setDialogVisible(false);
                   if(cart !== 'Market')setCart('Market')
-                  else navigation.navigate('Giỏ hàng',{products:products});
+                  else navigation.navigate('Giỏ hàng',{products:products,type:'market'});
                 }else Alert.alert('Thông báo','Bạn không có quyền vào mục này!');
               }}
             />
@@ -75,7 +88,8 @@ export default function NewCart({navigation}) {
               onPress={()=>{
                 if(role == 'manager' || role =='canteen-manager') {
                   setDialogVisible(false);
-                  if(cart !== 'Canteen'){setCart('Canteen')}
+                  if(cart !== 'Canteen')setCart('Canteen')
+                  else navigation.navigate('Giỏ hàng',{products:products,type:'canteen'});
                 }else Alert.alert('Thông báo','Bạn không có quyền vào mục này!');
               }}
             />
@@ -86,7 +100,8 @@ export default function NewCart({navigation}) {
             onPress={()=>{
               if(role == 'manager' || role =='library-manager'){
                 setDialogVisible(false);
-                if(cart !== 'Library'){setCart('Library')}
+                if(cart !== 'Library')setCart('Library')
+                else navigation.navigate('Giỏ hàng',{products:products,type:'library'});
               }else Alert.alert('Thông báo','Bạn không có quyền vào mục này!');
             }}
             />

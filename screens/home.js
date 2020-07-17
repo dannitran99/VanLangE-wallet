@@ -5,7 +5,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Categories from './categories';
 import AddProduct from './addProduct';
+import AddCanteenProduct from './addCanteenProduct';
+import AddLibraryProduct from './addLibraryProduct';
 import EditProduct from './editProduct';
+import EditCanteenProduct from './editCanteenProduct';
+import EditLibraryProduct from './editLibraryProduct';
 import CameraApp from './camera';
 import Market from './market';
 import Canteen from './canteen';
@@ -66,12 +70,15 @@ function StackCate({navigation}) {
     <Stack.Navigator>
        <Stack.Screen name="Danh mục" component={Categories}
        options={{
+         headerTransparent: true,
+         headerTitle: null,
           headerLeft:() => (
             <TouchableOpacity style={styles.icon} onPress={() => navigation.toggleDrawer()}>
-              <Ionicons name='ios-menu' size={30} />
+              <Ionicons name='ios-menu' size={30}/>
             </TouchableOpacity>
           ),
         }}/>
+
         <Stack.Screen name="Siêu thị" component={Market}
         options={{
            headerRight:() => (
@@ -80,13 +87,31 @@ function StackCate({navigation}) {
              </TouchableOpacity>
            ),
          }}/>
-        <Stack.Screen name="Căn tin" component={Canteen}/>
-        <Stack.Screen name="Thư viện" component={Library}/>
+        <Stack.Screen name="Căn tin" component={Canteen}
+        options={{
+           headerRight:() => (
+             <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Thêm sản phẩm căn tin')} >
+               <Ionicons name='md-add' size={30} />
+             </TouchableOpacity>
+           ),
+         }}/>
+        <Stack.Screen name="Thư viện" component={Library}
+        options={{
+           headerRight:() => (
+             <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Thêm sản phẩm thư viện')} >
+               <Ionicons name='md-add' size={30} />
+             </TouchableOpacity>
+           ),
+         }}/>
         <Stack.Screen name="Gửi xe" component={Motocycle}/>
         <Stack.Screen name="Thêm sản phẩm" component={AddProduct}/>
         <Stack.Screen name="Sửa sản phẩm" component={EditProduct} options={({ route }) => ({ title: route.params.detail.name })}/>
         <Stack.Screen name="Camera" component={CameraApp}/>
         <Stack.Screen name="Scan" component={Scan}/>
+        <Stack.Screen name="Thêm sản phẩm căn tin" component={AddCanteenProduct}/>
+        <Stack.Screen name="Sửa sản phẩm căn tin" component={EditCanteenProduct} options={({ route }) => ({ title: route.params.detail.name })}/>
+        <Stack.Screen name="Thêm sản phẩm thư viện" component={AddLibraryProduct}/>
+        <Stack.Screen name="Sửa sản phẩm thư viện" component={EditLibraryProduct} options={({ route }) => ({ title: route.params.detail.name })}/>
     </Stack.Navigator>
   );
 }

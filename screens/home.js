@@ -10,6 +10,8 @@ import AddLibraryProduct from './addLibraryProduct';
 import EditProduct from './editProduct';
 import EditCanteenProduct from './editCanteenProduct';
 import EditLibraryProduct from './editLibraryProduct';
+import AllOrder from './allOrder';
+import OrderDetail from './orderDetail';
 import CameraApp from './camera';
 import Market from './market';
 import Canteen from './canteen';
@@ -112,6 +114,8 @@ function StackCate({navigation}) {
         <Stack.Screen name="Sửa sản phẩm căn tin" component={EditCanteenProduct} options={({ route }) => ({ title: route.params.detail.name })}/>
         <Stack.Screen name="Thêm sản phẩm thư viện" component={AddLibraryProduct}/>
         <Stack.Screen name="Sửa sản phẩm thư viện" component={EditLibraryProduct} options={({ route }) => ({ title: route.params.detail.name })}/>
+        <Stack.Screen name="Đơn đặt hàng" component={AllOrder}/>
+        <Stack.Screen name="Chi tiết đơn hàng" component={OrderDetail}/>
     </Stack.Navigator>
   );
 }

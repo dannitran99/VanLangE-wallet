@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet,View,Text ,TouchableOpacity} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Categories from './categories';
 import AddProduct from './addProduct';
@@ -17,7 +18,10 @@ import Market from './market';
 import Canteen from './canteen';
 import Library from './library';
 import Motocycle from './motocycle';
-import Statistic from './statistic';
+import StatisticMarket from './statisticMarket';
+import StatisticCanteen from './statisticCanteen';
+import StatisticLibrary from './statisticLibrary';
+import StatisticParking from './statisticParking';
 import Scan from './scanBarCode';
 import NewCart from './newCart';
 import CartMarket from './cartMarket';
@@ -25,6 +29,7 @@ import Payment from './payment';
 import ButtonQR from '../components/buttonQR';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const TopTab = createMaterialTopTabNavigator();
 
 export default class Home extends React.Component {
   render(){
@@ -131,18 +136,28 @@ function StackScan({navigation}) {
   );
 }
 
+
+
 function StackStat({navigation}) {
   return (
-    <Stack.Navigator>
-       <Stack.Screen name="Thống kê" component={Statistic}
-       options={{
-          headerLeft:() => (
-            <TouchableOpacity style={styles.icon} onPress={() => navigation.toggleDrawer()}>
-              <Ionicons name='ios-menu' size={30} />
-            </TouchableOpacity>
-          ),
+    <TopTab.Navigator>
+      <TopTab.Screen name="Thống kê siêu thị" component={StatisticMarket}
+        options={{
+           title:'Siêu thị',
+         }}/>
+      <TopTab.Screen name="Thống kê căn tin" component={StatisticCanteen}
+        options={{
+          title:'Căn tin',
         }}/>
-    </Stack.Navigator>
+      <TopTab.Screen name="Thống kê thư viện" component={StatisticLibrary}
+        options={{
+           title:'Thư viện',
+         }}/>
+      <TopTab.Screen name="Thống kê gửi xe" component={StatisticParking}
+        options={{
+          title:'Giữ xe',
+        }}/>
+    </TopTab.Navigator>
   );
 }
 

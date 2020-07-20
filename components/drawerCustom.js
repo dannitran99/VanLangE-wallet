@@ -74,7 +74,16 @@ function CustomDrawerContent(props) {
                         else Alert.alert("Thông báo","Bạn không có quyền truy cập vào mục này!")}}
                       labelStyle={{ color: '#1f2233' }}
                   />
-
+                  <DrawerItem
+                      icon={({ size }) => (
+                          <AntDesign name="gift" color='#1f2233' size={size} />
+                      )}
+                      label="Voucher"
+                      onPress={() => {
+                        if(role == 'manager')props.navigation.navigate('VoucherStack');
+                        else Alert.alert("Thông báo","Bạn không có quyền truy cập vào mục này!")}}
+                      labelStyle={{ color: '#1f2233' }}
+                  />
               </Drawer.Section>
           </DrawerContentScrollView>
           <Drawer.Section style={styles.bottomDrawer}>

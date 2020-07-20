@@ -1,11 +1,13 @@
 import React from 'react';
 import { StyleSheet,View,Text } from 'react-native';
+import Chart from '../components/Chart'
 
-export default class Statistic extends React.Component {
+export default class StatisticCanteen extends React.Component {
   render(){
+    const type = 'canteen';
     return(
       <View style = {styles.container}>
-        <Text>Statistic</Text>
+        <Chart dataa={type}/>
       </View>
     );
   }

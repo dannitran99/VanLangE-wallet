@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {StyleSheet,Image,TouchableHighlight, AsyncStorage, Button, Text, TextInput, View ,Alert} from 'react-native';
+import {StyleSheet,Image,TouchableHighlight, AsyncStorage, Button, Text, TextInput, View ,Alert,TouchableOpacity} from 'react-native';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -12,6 +13,8 @@ import axios from 'axios';
 
 import Home from './screens/home';
 import AccountStack from './screens/accountStack';
+import Voucher from './screens/voucher';
+import AddVoucher from './screens/addVoucher'
 import PlashScreenImage from './assets/logo_transparent.png';
 const AuthContext = React.createContext();
 
@@ -182,22 +185,35 @@ export default function App({ navigation }) {
             <Drawer.Navigator initialRouteName="Home" drawerContent={props => <CustomDrawerContent {...props} />}>
                <Drawer.Screen name="Trang chủ" component={Home}/>
                <Drawer.Screen name="Đăng xuất" component={Logout}/>
-               <Drawer.Screen name="Tài khoản" component={AccountStack}
-                 options={{
-                     headerStyle: {
-                         backgroundColor: "#e1e6ea",
-                     },
-                     headerTitleStyle: { color: '#434c73' },
-                     headerTitleAlign: "center",
-                     headerTintColor: '#434c73',
-                 }}
-               />
+               <Drawer.Screen name="Tài khoản" component={AccountStack}/>
+               <Drawer.Screen name="VoucherStack" component={VoucherStack}/>
             </Drawer.Navigator>
           )}
 
       </NavigationContainer>
     </AuthContext.Provider>
   );
+  function VoucherStack({navigation}) {
+    return (
+      <Stack.Navigator>
+         <Stack.Screen name="Voucher" component={Voucher}
+           options={{
+               headerRight:() => (
+                 <TouchableOpacity onPress={() => navigation.navigate('Thêm Voucher')}>
+                   <Ionicons name='md-add' size={30} style={{ paddingHorizontal: 20 }}/>
+                 </TouchableOpacity>
+               ),
+               headerLeft: () => (
+                   <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+                       <Feather name="menu" size={25} color="#000" style={{ paddingHorizontal: 20 }} />
+                   </TouchableOpacity>
+               )
+           }}/>
+          <Stack.Screen name="Thêm Voucher" component={AddVoucher}/>
+      </Stack.Navigator>
+    );
+  }
+
 }
 
 const styles = StyleSheet.create({
